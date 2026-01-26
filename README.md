@@ -76,6 +76,41 @@ export OPENCODE_YOLO=true
 | `opencode/grok-code` | Fast search, coherence checks |
 | `opencode/minimax-m2.1` | Additional perspective |
 
+### Cursor CLI
+
+Cursor's agent mode via command line. Used by `/hive-experimental` and `/swarm-experimental` for Opus-powered agents.
+
+```bash
+# All platforms (requires Cursor installed)
+# CLI is bundled with Cursor - add to PATH
+
+# Windows (PowerShell)
+$env:PATH += ";$env:LOCALAPPDATA\Programs\cursor\resources\app\bin"
+
+# macOS
+export PATH="$PATH:/Applications/Cursor.app/Contents/Resources/app/bin"
+
+# Linux
+export PATH="$PATH:/opt/cursor/resources/app/bin"
+
+# Verify
+cursor --version
+```
+
+**Agent Mode:**
+```bash
+# Run agent with prompt
+cursor --agent "Implement feature X"
+
+# With specific model
+cursor --agent --model claude-opus-4 "Refactor this module"
+```
+
+**Notes:**
+- Requires Cursor app installed (https://cursor.sh)
+- Agent mode uses your Cursor subscription
+- Supports Claude, GPT-4, and other models configured in Cursor
+
 ---
 
 ## Process Orchestration
@@ -243,6 +278,7 @@ claude --version
 gemini --version
 codex --version
 opencode --version
+cursor --version  # Optional - for /hive-experimental
 
 # Orchestration
 mprocs --version
