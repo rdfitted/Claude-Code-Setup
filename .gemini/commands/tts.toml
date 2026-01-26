@@ -1,0 +1,3 @@
+name = "/tts"
+description = "Speak text aloud using ElevenLabs TTS"
+prompt = "Please run: uv run C:/Users/USERNAME/.claude/hooks/utils/tts/elevenlabs_tts.py --voice OCIdyYxzVR7iuL9fyP9f --model eleven_v3 '{{arguments}}' && cmd /c 'echo skip > C:/Users/USERNAME/.claude/hooks/utils/tts/.skip_endhook'"

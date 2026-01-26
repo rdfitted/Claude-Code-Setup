@@ -1,0 +1,41 @@
+# Logs and session data
+logs/
+*.log
+
+# Screenshots from testing
+*.png
+
+# Environment and secrets
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+
+# Local settings (keep example files)
+settings.local.json
+mcp.local.json
+
+# Session data
+.hive/sessions/
+.swarm/sessions/
+
+# Backup files with potential secrets
+*.backup
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/

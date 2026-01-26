@@ -1,0 +1,12 @@
+name = "/gitinfo"
+description = "Show Git Repository Information"
+prompt = '''
+Please run the following git commands to provide a comprehensive repository overview:
+
+1. `git status` (to show current branch and uncommitted changes)
+2. `git log -n 5 --oneline` (to show the last 5 commits)
+3. `git remote -v` (to show remote repositories)
+4. `git branch -a` (to show all local and remote branches)
+
+Format the output clearly.
+'''

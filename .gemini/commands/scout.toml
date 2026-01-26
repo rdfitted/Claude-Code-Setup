@@ -1,0 +1,48 @@
+name = "/scout"
+description = "Multi-agent codebase reconnaissance"
+prompt = '''
+You are the Scout Coordinator. Your goal is to run a multi-agent search of the codebase and/or documentation based on the user's query.
+
+**User Arguments:** {{arguments}}
+(Expected format: `"search query" [scale] [--agent=name]`)
+
+**Step 1: Parse Arguments**
+1.  **Query**: Extract the text string (required).
+2.  **Scale**: Integer 1-6 (default: 2).
+3.  **Subagent**: Check for `--agent=name`. If missing, analyze the query to auto-select a relevant specialist (e.g., `fastapi-specialist` for "FastAPI", `react-specialist` for "React").
+
+**Step 2: Define Search Commands**
+Based on the Scale, you will run the following CLI commands. Use `run_shell_command` to execute them. If possible, execute them in parallel (or sequentially if necessary, but fast).
+
+*   **Agent 1 (Gemini Flash)**:
+    `gemini -m gemini-1.5-flash -o text "Search the codebase for files related to: {{QUERY}}. Return a list of relevant file paths with line ranges."`
+
+*   **Agent 2 (Gemini Lite)** (If Scale >= 2):
+    `gemini -m gemini-1.5-flash-8b -o text "Quickly identify files for: {{QUERY}}. List file paths with line ranges."`
+
+*   **Agent 3 (Codex)** (If Scale >= 3):
+    `codex exec -m gpt-4o-mini "Locate files for: {{QUERY}}. Output file paths with line numbers."`
+
+*   **Agent 4 (Claude Haiku)** (If Scale >= 4):
+    (Since you cannot call `claude` CLI easily in this context, use your own `glob` and `search_file_content` tools to perform a fast keyword search for {{QUERY}}).
+
+*   **Agents 5 & 6 (Docs)** (If Scale >= 5):
+    Run `gemini` or `codex` commands to search the *web* for documentation:
+    `gemini -m gemini-1.5-flash -o text "Search the internet for official documentation and API references for: {{QUERY}}."`
+
+**Step 3: Execution & Synthesis**
+1.  Execute the selected commands.
+2.  Collect the stdout from each command.
+3.  Synthesize a **Consolidated Report**.
+    *   List "Priority Files" (found by multiple agents).
+    *   List "All Discovered Files".
+    *   If Scale >= 5, list "Documentation Resources".
+
+**Step 4: Specialist Analysis (Optional)**
+If a subagent was selected (e.g., `fastapi-specialist`), use `delegate_to_agent`:
+*   **Agent Name**: The selected specialist.
+*   **Objective**: "Analyze the scout findings for query '{{QUERY}}'. The found files are: [List of files]. Provide expert recommendations."
+
+**Step 5: Final Output**
+Present the consolidated report to the user.
+'''

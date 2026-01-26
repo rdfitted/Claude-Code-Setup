@@ -1,0 +1,46 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:docs.example.com)",
+      "WebSearch"
+    ],
+    "deny": []
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "context7",
+    "playwright"
+  ],
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash(git commit*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python C:\\Users\\USERNAME\\.claude\\hooks\\pre-commit\\run-checks.py",
+            "statusMessage": "Running pre-commit checks..."
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell.exe -ExecutionPolicy Bypass -File C:\\Users\\USERNAME\\.claude\\hooks\\resolvegitissue\\stop-hook.ps1"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "uv run C:\\Users\\USERNAME\\.claude\\hooks\\utils\\tts\\elevenlabs_tts.py \"Yo Ryan, I'm done, ready for more instructions.\""
+          }
+        ]
+      }
+    ]
+  }
+}

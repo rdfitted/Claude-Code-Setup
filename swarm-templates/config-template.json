@@ -1,0 +1,179 @@
+{
+  "session_id": "{SESSION_ID}",
+  "project_root": "{PROJECT_ROOT}",
+  "project_root_forward_slash": "{PROJECT_ROOT_FORWARD_SLASH}",
+  "mprocs_port": "{MPROCS_PORT}",
+  "branch_name": "{BRANCH_NAME}",
+  "base_branch": "{BASE_BRANCH}",
+
+  "paths": {
+    "session_root": "{PROJECT_ROOT}/.swarm/sessions/{SESSION_ID}",
+    "config": "{PROJECT_ROOT}/.swarm/sessions/{SESSION_ID}/config.json",
+    "docs": {
+      "roles": "{PROJECT_ROOT}/.swarm/sessions/{SESSION_ID}/docs/roles.md",
+      "declaration_protocol": "{PROJECT_ROOT}/.swarm/sessions/{SESSION_ID}/docs/declaration-protocol.md",
+      "planner_cross_reference": "{PROJECT_ROOT}/.swarm/sessions/{SESSION_ID}/docs/planner-cross-reference.md",
+      "model_selection": "{PROJECT_ROOT}/.swarm/sessions/{SESSION_ID}/docs/model-selection.md",
+      "spawn_templates": "{PROJECT_ROOT}/.swarm/sessions/{SESSION_ID}/docs/spawn-templates.md",
+      "log_protocol": "{PROJECT_ROOT}/.swarm/sessions/{SESSION_ID}/docs/log-protocol.md"
+    },
+    "state": {
+      "context": "{PROJECT_ROOT}/.swarm/sessions/{SESSION_ID}/state/context.md",
+      "responsibility_matrix": "{PROJECT_ROOT}/.swarm/sessions/{SESSION_ID}/state/responsibility-matrix.md",
+      "file_ownership": "{PROJECT_ROOT}/.swarm/sessions/{SESSION_ID}/state/file-ownership.md",
+      "session_guidelines": "{PROJECT_ROOT}/.swarm/sessions/{SESSION_ID}/state/session-guidelines.md",
+      "planner_status": "{PROJECT_ROOT}/.swarm/sessions/{SESSION_ID}/state/planner-status.md",
+      "wave_status": "{PROJECT_ROOT}/.swarm/sessions/{SESSION_ID}/state/wave-status.md"
+    },
+    "logs": {
+      "queen": "{PROJECT_ROOT}/.swarm/sessions/{SESSION_ID}/logs/queen.log",
+      "coordination": "{PROJECT_ROOT}/.swarm/sessions/{SESSION_ID}/logs/coordination.log",
+      "planner_template": "{PROJECT_ROOT}/.swarm/sessions/{SESSION_ID}/logs/planner-{X}.log"
+    },
+    "prompts": {
+      "queen": "{PROJECT_ROOT}/.swarm/sessions/{SESSION_ID}/queen-prompt.md",
+      "planner_template": "{PROJECT_ROOT}/.swarm/sessions/{SESSION_ID}/planner-{X}-prompt.md"
+    },
+    "tasks": {
+      "planner_template": "{PROJECT_ROOT}/.swarm/sessions/{SESSION_ID}/tasks/planner-{X}",
+      "worker_task_template": "{PROJECT_ROOT}/.swarm/sessions/{SESSION_ID}/tasks/planner-{X}/worker-{N}{X}-task.md",
+      "summary_template": "{PROJECT_ROOT}/.swarm/sessions/{SESSION_ID}/tasks/planner-{X}/summary.md"
+    }
+  },
+
+  "models": {
+    "queen": {
+      "model": "opus",
+      "cli": "claude",
+      "command": "claude --model opus --dangerously-skip-permissions"
+    },
+    "planner": {
+      "model": "opus",
+      "cli": "claude",
+      "command": "claude --model opus --dangerously-skip-permissions"
+    },
+    "workers": {
+      "1": {
+        "role": "backend",
+        "model": "opus",
+        "cli": "cursor",
+        "command_template": "cmd /c wsl -d Ubuntu /root/.local/bin/agent --force",
+        "requires_bat": true,
+        "specialty": "ALL Python/FastAPI/database work - models, schemas, CRUD, routes, migrations"
+      },
+      "2": {
+        "role": "frontend",
+        "model": "gemini-3-pro-preview",
+        "cli": "gemini",
+        "command_template": "gemini -m gemini-3-pro-preview -y -i",
+        "requires_bat": false,
+        "specialty": "ALL TypeScript/React work - types, API client, components, hooks"
+      },
+      "3": {
+        "role": "coherence",
+        "model": "grok-code",
+        "cli": "opencode",
+        "command_template": "opencode -m opencode/grok-code --prompt",
+        "requires_bat": false,
+        "env": {"OPENCODE_YOLO": "true"},
+        "specialty": "Cross-cutting consistency checks between backend and frontend"
+      },
+      "4": {
+        "role": "simplify",
+        "model": "gpt-5.2",
+        "cli": "codex",
+        "command_template": "codex --dangerously-bypass-approvals-and-sandbox -m gpt-5.2",
+        "requires_bat": false,
+        "specialty": "Code cleanup, optimization, dead code removal, refactoring"
+      }
+    },
+    "review": {
+      "reviewer": {
+        "model": "big-pickle",
+        "cli": "opencode",
+        "command_template": "opencode -m opencode/big-pickle --prompt",
+        "env": {"OPENCODE_YOLO": "true"},
+        "specialty": "Deep code review, security analysis, quality assessment"
+      },
+      "tester": {
+        "model": "gpt-5.2",
+        "cli": "codex",
+        "command_template": "codex --dangerously-bypass-approvals-and-sandbox -m gpt-5.2",
+        "specialty": "Test execution, coverage verification"
+      },
+      "code_quality": {
+        "model": "opus",
+        "cli": "cursor",
+        "command_template": "cmd /c wsl -d Ubuntu /root/.local/bin/agent --force",
+        "requires_bat": true,
+        "specialty": "PR comment resolution"
+      }
+    },
+    "scouts": {
+      "architecture": {
+        "model": "big-pickle",
+        "cli": "opencode",
+        "command_template": "opencode -m opencode/big-pickle --prompt"
+      },
+      "organization": {
+        "model": "glm-4.7-free",
+        "cli": "opencode",
+        "command_template": "opencode -m opencode/glm-4.7-free --prompt"
+      },
+      "entry_points": {
+        "model": "grok-code",
+        "cli": "opencode",
+        "command_template": "opencode -m opencode/grok-code --prompt"
+      },
+      "learning": {
+        "model": "glm-4.7-free",
+        "cli": "opencode",
+        "command_template": "opencode -m opencode/glm-4.7-free --prompt"
+      }
+    }
+  },
+
+  "timing": {
+    "cursor_opus": {"startup_seconds": 45, "patience_minutes": 5},
+    "gemini": {"startup_seconds": 75, "patience_minutes": 8},
+    "grok": {"startup_seconds": 10, "patience_minutes": 3},
+    "codex": {"startup_seconds": 105, "patience_minutes": 12},
+    "opencode": {"startup_seconds": 15, "patience_minutes": 3}
+  },
+
+  "spawn_commands": {
+    "planner": {
+      "declaration": "DECLARATION: I will spawn Planner {X} using Claude CLI with model Opus.",
+      "command": "mprocs --server 127.0.0.1:{MPROCS_PORT} --ctl '{\"c\": \"add-proc\", \"cmd\": \"claude --model opus --dangerously-skip-permissions \\\"Read {PROJECT_ROOT}/.swarm/sessions/{SESSION_ID}/planner-{X}-prompt.md and execute.\\\"\", \"name\": \"planner-{X}\", \"cwd\": \"{PROJECT_ROOT}\"}'"
+    },
+    "worker_1": {
+      "role": "backend",
+      "declaration": "DECLARATION: I will spawn Worker 1{X} using Cursor CLI with model Opus 4.5.\nRole: Backend - ALL Python/FastAPI/database work",
+      "bat_content": "@echo off\nmprocs --server 127.0.0.1:{MPROCS_PORT} --ctl \"{\\\"c\\\": \\\"add-proc\\\", \\\"cmd\\\": \\\"cmd /c wsl -d Ubuntu /root/.local/bin/agent --force \\\\\\\"Read {PROJECT_ROOT_FORWARD_SLASH}/.swarm/sessions/{SESSION_ID}/tasks/planner-{X}/worker-1{X}-task.md and execute.\\\\\\\"\\\", \\\"name\\\": \\\"worker-1{X}\\\", \\\"cwd\\\": \\\"{PROJECT_ROOT_FORWARD_SLASH}\\\"}\"",
+      "bat_path": "{PROJECT_ROOT}/.swarm/sessions/{SESSION_ID}/tasks/planner-{X}/spawn-worker-1{X}.bat"
+    },
+    "worker_2": {
+      "role": "frontend",
+      "declaration": "DECLARATION: I will spawn Worker 2{X} using Gemini CLI with model gemini-3-pro-preview.\nRole: Frontend - ALL TypeScript/React work",
+      "command": "mprocs --server 127.0.0.1:{MPROCS_PORT} --ctl '{\"c\": \"add-proc\", \"cmd\": \"gemini -m gemini-3-pro-preview -y -i \\\"Read {PROJECT_ROOT}/.swarm/sessions/{SESSION_ID}/tasks/planner-{X}/worker-2{X}-task.md and execute.\\\"\", \"name\": \"worker-2{X}\", \"cwd\": \"{PROJECT_ROOT}\"}'"
+    },
+    "worker_3": {
+      "role": "coherence",
+      "declaration": "DECLARATION: I will spawn Worker 3{X} using OpenCode CLI with model grok-code.\nRole: Coherence - Cross-cutting consistency checks",
+      "command": "mprocs --server 127.0.0.1:{MPROCS_PORT} --ctl '{\"c\": \"add-proc\", \"cmd\": \"opencode -m opencode/grok-code --prompt \\\"Read {PROJECT_ROOT}/.swarm/sessions/{SESSION_ID}/tasks/planner-{X}/worker-3{X}-task.md and execute.\\\"\", \"name\": \"worker-3{X}\", \"cwd\": \"{PROJECT_ROOT}\", \"env\": {\"OPENCODE_YOLO\": \"true\"}}'"
+    },
+    "worker_4": {
+      "role": "simplify",
+      "declaration": "DECLARATION: I will spawn Worker 4{X} using Codex CLI with model gpt-5.2.\nRole: Simplify - Code cleanup, optimization",
+      "command": "mprocs --server 127.0.0.1:{MPROCS_PORT} --ctl '{\"c\": \"add-proc\", \"cmd\": \"codex --dangerously-bypass-approvals-and-sandbox -m gpt-5.2 \\\"Read {PROJECT_ROOT}/.swarm/sessions/{SESSION_ID}/tasks/planner-{X}/worker-4{X}-task.md and execute.\\\"\", \"name\": \"worker-4{X}\", \"cwd\": \"{PROJECT_ROOT}\"}'"
+    },
+    "reviewer": {
+      "declaration": "DECLARATION: I will spawn Reviewer {X} using OpenCode CLI with model big-pickle.\nRole: Deep code review, security analysis",
+      "command": "mprocs --server 127.0.0.1:{MPROCS_PORT} --ctl '{\"c\": \"add-proc\", \"cmd\": \"opencode -m opencode/big-pickle --prompt \\\"Read {PROJECT_ROOT}/.swarm/sessions/{SESSION_ID}/tasks/planner-{X}/reviewer-{X}-task.md and execute.\\\"\", \"name\": \"reviewer-{X}\", \"cwd\": \"{PROJECT_ROOT}\", \"env\": {\"OPENCODE_YOLO\": \"true\"}}'"
+    },
+    "tester": {
+      "declaration": "DECLARATION: I will spawn Tester {X} using Codex CLI with model gpt-5.2.\nRole: Test execution, coverage verification",
+      "command": "mprocs --server 127.0.0.1:{MPROCS_PORT} --ctl '{\"c\": \"add-proc\", \"cmd\": \"codex --dangerously-bypass-approvals-and-sandbox -m gpt-5.2 \\\"Read {PROJECT_ROOT}/.swarm/sessions/{SESSION_ID}/tasks/planner-{X}/tester-{X}-task.md and execute.\\\"\", \"name\": \"tester-{X}\", \"cwd\": \"{PROJECT_ROOT}\"}'"
+    }
+  }
+}

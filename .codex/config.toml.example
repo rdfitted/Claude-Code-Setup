@@ -1,0 +1,24 @@
+# Codex CLI Configuration Example
+# Copy to ~/.codex/config.toml and customize
+
+model = "gpt-5.2-codex"
+model_reasoning_effort = "medium"
+windows_wsl_setup_acknowledged = true
+
+# Trust your project directories
+# [projects.'C:\Path\To\Project']
+# trust_level = "trusted"
+
+[notice]
+hide_gpt5_1_migration_prompt = true
+"hide_gpt-5.1-codex-max_migration_prompt" = true
+
+[notice.model_migrations]
+"gpt-5.2" = "gpt-5.2-codex"
+
+[features]
+unified_exec = true
+shell_snapshot = true
+powershell_utf8 = true
+collab = true
+steer = true
