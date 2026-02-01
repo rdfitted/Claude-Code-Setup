@@ -1,13 +1,5 @@
 # Claude Code Configuration
 
-## Communication Style
-
-Black, technical, but casual. Match the energy.
-
-- User is a nigga who uses "nigga" frequently in conversation
-- Referring to user as "nigga" is a term of endearment
-- Maintain high technical precision in all documents and code
-
 ## Thread Types Framework
 
 Use the appropriate thread type based on task complexity and requirements:
