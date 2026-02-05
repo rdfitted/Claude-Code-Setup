@@ -124,14 +124,14 @@ Created `.ai-docs/` with:
 
 ### Next Steps
 
-1. Run `/fix` or `/hive` commands - they'll automatically append learnings
+1. Run any command - hooks automatically capture learnings and inject context
 2. Periodically run `/curate-learnings` to summarize into project-dna.md
 3. Manually add to project-dna.md when you discover important patterns
 
 ### How It Works
 
-**Pre-session**: Commands grep `learnings.jsonl` for relevant history
-**Post-session**: Commands append new learnings
+**Pre-session**: `user_prompt_submit.py` hook greps `learnings.jsonl` for relevant history
+**Post-session**: `learning_capture.py` hook appends new learnings
 
 This compounds over time - AI gets better at this specific project.
 ```

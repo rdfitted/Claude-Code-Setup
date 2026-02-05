@@ -114,7 +114,7 @@ Report back the complete Gemini output."
 )
 ```
 
-**Agent 2 - Codex GPT-5.2 (Anti-Pattern Hunter):**
+**Agent 2 - Codex 5.2-codex (Anti-Pattern Hunter):**
 ```
 Task(
   subagent_type="general-purpose",
@@ -122,7 +122,7 @@ Task(
 
 IMMEDIATELY use the Bash tool to run this EXACT command (10 minute timeout):
 
-codex exec -m gpt-5.2 -s read-only -c model_reasoning_effort=\"medium\" --skip-git-repo-check \"Assess this codebase for ANTI-PATTERNS and code smells. Focus on:
+codex exec -m 5.2-codex -s read-only -c model_reasoning_effort=\"medium\" --skip-git-repo-check \"Assess this codebase for ANTI-PATTERNS and code smells. Focus on:
 1. Nested ternary operators
 2. Overly complex conditionals (deep nesting)
 3. Dense one-liners sacrificing readability
@@ -263,7 +263,7 @@ For each finding across all agents:
    - Extract consistent patterns worth codifying
    - Note consistency scores
 
-2. ANTI-PATTERNS (from Codex GPT-5.2):
+2. ANTI-PATTERNS (from Codex 5.2-codex):
    - Extract anti-patterns to prohibit
    - Note severity levels
 
@@ -365,7 +365,7 @@ Present findings in actionable format:
 | Agent | Model | Focus |
 |-------|-------|-------|
 | Agent 1 | Gemini Flash | **Pattern Detective** - naming, imports, function styles |
-| Agent 2 | Codex GPT-5.2 | **Anti-Pattern Hunter** - code smells, complexity |
+| Agent 2 | Codex 5.2-codex | **Anti-Pattern Hunter** - code smells, complexity |
 | Agent 3 | Claude Haiku | **Standards Synthesizer** - quality opportunities |
 | Agent 4 | OpenCode BigPickle | **Architecture Reviewer** - modules, dependencies, layering |
 | Agent 5 | OpenCode Grok Code | **Coherence Analyst** - frontend/backend alignment |
@@ -379,8 +379,8 @@ Each agent uses a different model perspective to assess different dimensions of 
 # Agent 1 - Gemini Flash (Pattern Detective)
 CLOUDSDK_CORE_PROJECT="" GOOGLE_CLOUD_PROJECT="" GCLOUD_PROJECT="" GEMINI_API_KEY=${GEMINI_API_KEY} gemini -m gemini-3-flash-preview -o text "Assess codebase for patterns: {focus_area}"
 
-# Agent 2 - Codex GPT-5.2 (Anti-Pattern Hunter)
-codex exec -m gpt-5.2 -s read-only -c model_reasoning_effort="medium" --skip-git-repo-check "Assess codebase for anti-patterns: {focus_area}"
+# Agent 2 - Codex 5.2-codex (Anti-Pattern Hunter)
+codex exec -m 5.2-codex -s read-only -c model_reasoning_effort="medium" --skip-git-repo-check "Assess codebase for anti-patterns: {focus_area}"
 
 # Agent 3 - Claude Haiku (Standards Synthesizer)
 Task(

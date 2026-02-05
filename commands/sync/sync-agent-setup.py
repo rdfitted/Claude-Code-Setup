@@ -30,7 +30,6 @@ SYNC_MAP = {
     ".claude/skills": "skills",
     ".claude/hooks": "hooks",
     ".claude/agents": "agents",
-    ".claude/swarm-templates": "swarm-templates",
     ".claude/settings.json": "settings.json",
     ".claude/status_lines": "status_lines",
     ".claude/output-styles": "output-styles",

@@ -45,7 +45,6 @@ Ask user if they want to commit and push the changes:
 | `skills/` | `skills/` |
 | `hooks/` | `hooks/` |
 | `agents/` | `agents/` |
-| `swarm-templates/` | `swarm-templates/` |
 | `settings.json` | `settings.json` |
 | `status_lines/` | `status_lines/` |
 | `output-styles/` | `output-styles/` |

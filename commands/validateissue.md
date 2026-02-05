@@ -7,13 +7,7 @@ allowed-tools: [Bash, TodoWrite, Task, Read, Write, Edit, Glob, Grep]
 
 # Purpose
 
-Validate a GitHub issue by spawning multiple investigation agents to verify that the issue is well-formed, technically accurate, and actionable. This command does NOT use the Hive structure - it uses Task agents directly with external CLI tools (Gemini, Codex).
-
-## When to Use
-
-Use this command when you want a quick validation without the overhead of setting up a full Hive session. The validation runs within the current Claude session using Task agents.
-
-For full Hive-based validation with visible multi-agent coordination, use `/validate-hive-issue` instead.
+Validate a GitHub issue by spawning multiple investigation agents to verify that the issue is well-formed, technically accurate, and actionable. Uses Task agents directly with external CLI tools (Gemini, Codex).
 
 ## System Prompt Override
 
@@ -158,7 +152,7 @@ Body: {ISSUE_BODY}
 
 IMMEDIATELY use the Bash tool to run this EXACT command (10 minute timeout):
 
-codex exec -m gpt-5.2 -s read-only -c model_reasoning_effort=\"high\" --skip-git-repo-check \"Verify this GitHub issue by checking if the described problem/feature actually exists:
+codex exec -m 5.2-codex -s read-only -c model_reasoning_effort=\"high\" --skip-git-repo-check \"Verify this GitHub issue by checking if the described problem/feature actually exists:
 
 Issue: {ISSUE_TITLE}
 Description: {ISSUE_BODY}
@@ -411,15 +405,4 @@ Based on the validation:
 
 ---
 
-## Comparison with /validate-hive-issue
-
-| Feature | /validateissue | /validate-hive-issue |
-|---------|----------------|----------------------|
-| Structure | Task agents in session | Full Hive with mprocs |
-| Visibility | Results in chat | Separate terminal windows |
-| Setup | None required | Requires mprocs installed |
-| Best for | Quick validation | Complex issues needing coordination |
-| Output | Report in chat | Report file + visible agents |
-
-Use `/validateissue` for quick inline validation.
-Use `/validate-hive-issue` when you want to watch the multi-agent coordination.
+Use `/validateissue` for quick inline validation with multi-model diversity.

@@ -14,12 +14,42 @@
   "hooks": {
     "PreToolUse": [
       {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python C:\\Users\\USERNAME\\.claude\\hooks\\pre_tool_use.py",
+            "statusMessage": "Safety check..."
+          }
+        ]
+      },
+      {
         "matcher": "Bash(git commit*)",
         "hooks": [
           {
             "type": "command",
             "command": "python C:\\Users\\USERNAME\\.claude\\hooks\\pre-commit\\run-checks.py",
             "statusMessage": "Running pre-commit checks..."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python C:\\Users\\USERNAME\\.claude\\hooks\\post_tool_use.py"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python C:\\Users\\USERNAME\\.claude\\hooks\\user_prompt_submit.py",
+            "statusMessage": "Loading context..."
           }
         ]
       }

@@ -202,7 +202,7 @@ Body: {ISSUE_BODY}
 
 IMMEDIATELY use the Bash tool to run this EXACT command (10 minute timeout):
 
-codex exec -m gpt-5.2 -s read-only -c model_reasoning_effort=\"high\" --skip-git-repo-check \"Deep technical reassessment of issue: {ISSUE_TITLE}
+codex exec -m 5.2-codex -s read-only -c model_reasoning_effort=\"high\" --skip-git-repo-check \"Deep technical reassessment of issue: {ISSUE_TITLE}
 
 Original description: {ISSUE_BODY}
 

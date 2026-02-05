@@ -1,10 +1,13 @@
 {
   "statusLine": {
     "type": "command",
-    "command": "python \"C:\\Users\\USERNAME\\.claude\\status_lines\\status_line_v3.py\""
+    "command": "python \"C:\\Users\\RDuff\\.claude\\status_lines\\status_line_v3.py\""
   },
   "outputStyle": "default",
   "feedbackSurveyState": {
     "lastShownTime": 1754159218555
+  },
+  "enabledPlugins": {
+    "rust-analyzer-lsp@claude-plugins-official": true
   }
 }

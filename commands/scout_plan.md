@@ -187,7 +187,7 @@ Present comprehensive summary to user.
 
 ## Stage 2: Multi-Agent Plan Created
 **Plan File**: `{PLAN_FILENAME}`
-**Planning Agents**: GPT-5.2, Gemini 3 Pro, Opus 4.5
+**Planning Agents**: 5.2-codex, Gemini 3 Pro, Opus 4.5
 **Documentation Referenced**: {AIDOCS_STATUS}
 
 ### Synthesis Summary
@@ -241,7 +241,7 @@ Or continue with full workflow:
 
 📋 **Synthesized Plan**: `{PLAN_FILENAME}`
 📚 **Documentation**: `{AIDOCS_PATH or "None (scale < 5)"}`
-🤖 **Planning Agents**: 3 (GPT-5.2, Gemini 3 Pro, Opus 4.5)
+🤖 **Planning Agents**: 3 (5.2-codex, Gemini 3 Pro, Opus 4.5)
 🔍 **Scout Agents**: {SCOUT_SCALE}
 ```
 

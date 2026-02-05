@@ -7,7 +7,7 @@ allowed-tools: [Bash, TodoWrite, Task, Read, Write, Edit, Glob]
 
 # Purpose
 
-Multi-agent debate system that leverages GPT-5.2, Gemini 3 Pro, and Claude Haiku to argue different perspectives on a technical decision. Each model builds evidence-based arguments for both sides, then the main agent synthesizes findings to determine the stronger position.
+Multi-agent debate system that leverages 5.2-codex, Gemini 3 Pro, and Claude Haiku to argue different perspectives on a technical decision. Each model builds evidence-based arguments for both sides, then the main agent synthesizes findings to determine the stronger position.
 
 ## System Prompt Override
 
@@ -118,14 +118,14 @@ Do NOT be neutral. Argue STRONGLY for your assigned perspective using codebase e
 
 ### Step 3: Agent-Specific Bash Commands
 
-**Agent 1 - GPT-5.2 for Perspective A:**
+**Agent 1 - 5.2-codex for Perspective A:**
 ```bash
-codex exec -m gpt-5.2 -s read-only -c model_reasoning_effort="low" --skip-git-repo-check "You are arguing that {PERSPECTIVE_A} for the topic: {TOPIC}. Search the codebase for evidence supporting this perspective. Return specific file paths and code examples that support this position. Build the strongest possible case."
+codex exec -m 5.2-codex -s read-only -c model_reasoning_effort="low" --skip-git-repo-check "You are arguing that {PERSPECTIVE_A} for the topic: {TOPIC}. Search the codebase for evidence supporting this perspective. Return specific file paths and code examples that support this position. Build the strongest possible case."
 ```
 
-**Agent 2 - GPT-5.2 for Perspective B:**
+**Agent 2 - 5.2-codex for Perspective B:**
 ```bash
-codex exec -m gpt-5.2 -s read-only -c model_reasoning_effort="low" --skip-git-repo-check "You are arguing that {PERSPECTIVE_B} for the topic: {TOPIC}. Search the codebase for evidence supporting this perspective. Return specific file paths and code examples that support this position. Build the strongest possible case."
+codex exec -m 5.2-codex -s read-only -c model_reasoning_effort="low" --skip-git-repo-check "You are arguing that {PERSPECTIVE_B} for the topic: {TOPIC}. Search the codebase for evidence supporting this perspective. Return specific file paths and code examples that support this position. Build the strongest possible case."
 ```
 
 **Agent 3 - Gemini 3 Pro for Perspective A:**
@@ -188,7 +188,7 @@ Generate a comprehensive comparison report:
 
 ```markdown
 # Compare & Contrast: {TOPIC}
-**Models Used**: GPT-5.2, Gemini 3 Pro, Claude Haiku | **Perspectives**: 2 | **Total Arguments**: {COUNT}
+**Models Used**: 5.2-codex, Gemini 3 Pro, Claude Haiku | **Perspectives**: 2 | **Total Arguments**: {COUNT}
 
 ---
 
@@ -201,7 +201,7 @@ Generate a comprehensive comparison report:
 
 ## Arguments for Perspective A
 
-### GPT-5.2 Argument
+### 5.2-codex Argument
 {CODEX_PERSPECTIVE_A_ARGUMENT}
 
 ### Gemini 3 Pro Argument
@@ -214,7 +214,7 @@ Generate a comprehensive comparison report:
 
 ## Arguments for Perspective B
 
-### GPT-5.2 Argument
+### 5.2-codex Argument
 {CODEX_PERSPECTIVE_B_ARGUMENT}
 
 ### Gemini 3 Pro Argument
@@ -301,12 +301,12 @@ Generate a comprehensive comparison report:
 ## Agent Performance
 
 **Perspective A Advocates:**
-- ✓ GPT-5.2: {EVIDENCE_COUNT} pieces of evidence
+- ✓ 5.2-codex: {EVIDENCE_COUNT} pieces of evidence
 - ✓ Gemini 3 Pro: {EVIDENCE_COUNT} pieces of evidence
 - ✓ Claude Haiku: {EVIDENCE_COUNT} pieces of evidence
 
 **Perspective B Advocates:**
-- ✓ GPT-5.2: {EVIDENCE_COUNT} pieces of evidence
+- ✓ 5.2-codex: {EVIDENCE_COUNT} pieces of evidence
 - ✓ Gemini 3 Pro: {EVIDENCE_COUNT} pieces of evidence
 - ✓ Claude Haiku: {EVIDENCE_COUNT} pieces of evidence
 

@@ -11,6 +11,8 @@ Execute feature implementation using a Claude Sonnet agent, either from an exist
 
 **CRITICAL**: Always works on a feature/fix branch - NEVER commits directly to main/master/staging.
 
+> **Note**: Branch protection is also enforced by the `PreToolUse` hook (`pre_tool_use.py`), which blocks Write/Edit on protected branches.
+
 ## Variables
 
 - `{INPUT}`: User's input - either a feature description OR a path to a plan file

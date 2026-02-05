@@ -21,7 +21,7 @@ Invoke OpenAI models for text generation, reasoning, code analysis, and complex 
 
 **API Key Location**: `C:\Users\USERNAME\env` (OPENAI_API_KEY)
 
-**Default API Key**: Use environment variable `OPENAI_API_KEY`
+**API Key**: Set `OPENAI_API_KEY` environment variable or load from env file
 
 ## Usage
 

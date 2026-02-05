@@ -206,7 +206,7 @@ Task(
 
 IMMEDIATELY use the Bash tool to run this EXACT command (10 minute timeout):
 
-codex exec -m gpt-5.2 -s read-only -c model_reasoning_effort=\"low\" --skip-git-repo-check \"Investigate: {ISSUE_DESCRIPTION}. Identify affected files, code patterns, dependencies, and suggest implementation approach. Focus on technical details.\"
+codex exec -m 5.2-codex -s read-only -c model_reasoning_effort=\"low\" --skip-git-repo-check \"Investigate: {ISSUE_DESCRIPTION}. Identify affected files, code patterns, dependencies, and suggest implementation approach. Focus on technical details.\"
 
 After the command completes, format the results as:
 ## Files Found
@@ -409,7 +409,7 @@ Context from codebase investigation:
 
 IMMEDIATELY use the Bash tool to run:
 
-codex exec -m gpt-5.2 -c model_reasoning_effort=\"high\" -c thinking=\"enabled\" --skip-git-repo-check \"Analyze scope and complexity for: {ISSUE_DESCRIPTION}.
+codex exec -m 5.2-codex -c model_reasoning_effort=\"high\" -c thinking=\"enabled\" --skip-git-repo-check \"Analyze scope and complexity for: {ISSUE_DESCRIPTION}.
 
 Based on these files: {FILE_LIST}
 

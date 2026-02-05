@@ -31,10 +31,8 @@ Scale 3: 3 agents (+ OpenCode Grok Code - quick search)
 
 - `{FIX_DESCRIPTION}`: User's fix description
 - `{SCALE}`: Scale level (default: 2)
-- `{KEYWORDS}`: Extracted keywords for learning lookup
-- `{HISTORICAL_CONTEXT}`: Grep results from learnings
-- `{PROJECT_DNA}`: Project-specific patterns
-- `{CODE_STANDARDS}`: Coding conventions from CLAUDE.md
+
+> **Note**: Historical context, project DNA, and code standards are automatically injected by the `UserPromptSubmit` hook. No manual keyword extraction or learning lookup needed.
 
 ## Workflow
 
@@ -44,54 +42,13 @@ Extract:
 - `FIX_DESCRIPTION`: The fix description
 - `SCALE`: Scale level (default: 2)
 
-### Step 2: Extract Keywords
-
-Extract keywords from the description for learning lookup:
-
-```bash
-powershell -Command "$desc = '{FIX_DESCRIPTION}'; $stopwords = Get-Content '$HOME\.ai-docs\stopwords.txt' -ErrorAction SilentlyContinue | Where-Object { $_ -notmatch '^#' -and $_ -ne '' }; $words = $desc -split '\W+' | Where-Object { $_.Length -gt 3 -and $_ -notin $stopwords }; ($words | Select-Object -Unique) -join '|'"
-```
-
-Store result as `KEYWORDS` (e.g., `auth|token|refresh`).
-
-### Step 3: Grep Historical Context
-
-**Project learnings:**
-```bash
-grep -iE "{KEYWORDS}" .ai-docs/learnings.jsonl 2>/dev/null | tail -5
-```
-
-**Global patterns:**
-```bash
-grep -iE "{KEYWORDS}" "$HOME/.ai-docs/universal-patterns.md" 2>/dev/null | head -10
-```
-
-Store combined results as `HISTORICAL_CONTEXT`.
-
-### Step 4: Read Project DNA
-
-```bash
-cat .ai-docs/project-dna.md 2>/dev/null | head -50
-```
-
-Store as `PROJECT_DNA` (or empty if doesn't exist).
-
-### Step 4b: Read Code Standards (CLAUDE.md)
-
-```bash
-cat CLAUDE.md 2>/dev/null | head -100
-```
-
-Store as `CODE_STANDARDS`. This contains project-specific coding conventions that MUST be followed when applying fixes.
-
-### Step 5: Create Todo List
+### Step 2: Create Todo List
 
 ```json
 [
   {"content": "Investigate relevant files", "activeForm": "Investigating relevant files", "status": "pending"},
   {"content": "Apply fix", "activeForm": "Applying fix", "status": "pending"},
-  {"content": "Verify fix", "activeForm": "Verifying fix", "status": "pending"},
-  {"content": "Record learning", "activeForm": "Recording learning", "status": "pending"}
+  {"content": "Verify fix", "activeForm": "Verifying fix", "status": "pending"}
 ]
 ```
 
@@ -122,9 +79,7 @@ Task(
 
 CONTEXT:
 - Fix needed: {FIX_DESCRIPTION}
-- Historical learnings: {HISTORICAL_CONTEXT}
-- Project DNA: {PROJECT_DNA}
-- Code standards: {CODE_STANDARDS}
+- (Historical context auto-injected by hooks)
 
 IMMEDIATELY use the Bash tool to run this command (3-minute timeout):
 
@@ -152,9 +107,7 @@ Task(
 
 CONTEXT:
 - Fix needed: {FIX_DESCRIPTION}
-- Historical learnings: {HISTORICAL_CONTEXT}
-- Project DNA: {PROJECT_DNA}
-- Code standards: {CODE_STANDARDS}
+- (Historical context auto-injected by hooks)
 
 IMMEDIATELY use the Bash tool to run this command (3-minute timeout):
 
@@ -182,9 +135,7 @@ Task(
 
 CONTEXT:
 - Fix needed: {FIX_DESCRIPTION}
-- Historical learnings: {HISTORICAL_CONTEXT}
-- Project DNA: {PROJECT_DNA}
-- Code standards: {CODE_STANDARDS}
+- (Historical context auto-injected by hooks)
 
 IMMEDIATELY use the Bash tool to run this command (3-minute timeout):
 
@@ -216,56 +167,9 @@ After agents return (or after direct investigation for Scale 0):
 
 ---
 
-### Step 8: Record Learning
+### Step 8: Output Summary
 
-**CRITICAL**: Append learning to `.ai-docs/learnings.jsonl`
-
-Generate a learning entry:
-
-```bash
-powershell -Command "
-$learning = @{
-  date = (Get-Date -Format 'yyyy-MM-dd')
-  session = 'fix-' + (Get-Date -Format 'yyyyMMdd-HHmmss')
-  task = '{FIX_DESCRIPTION}'
-  outcome = 'success'
-  keywords = @({KEYWORDS_ARRAY})
-  insight = '{INSIGHT_FROM_FIX}'
-  files_touched = @({FILES_MODIFIED})
-} | ConvertTo-Json -Compress
-Add-Content -Path '.ai-docs/learnings.jsonl' -Value \$learning
-"
-```
-
-**If `.ai-docs/` doesn't exist**, skip learning capture and suggest running `/init-project-dna`.
-
----
-
-### Step 9: Curate Learnings (Auto-Run)
-
-**CRITICAL**: After recording the learning, automatically curate if threshold is met.
-
-```bash
-# Check learning count
-LEARNING_COUNT=$(wc -l < .ai-docs/learnings.jsonl 2>/dev/null || echo "0")
-
-# If 5+ learnings, run curation
-if [ "$LEARNING_COUNT" -ge 5 ]; then
-  echo "CURATING: $LEARNING_COUNT learnings accumulated"
-fi
-```
-
-**If count >= 5**: Execute the `curate-learnings` skill workflow inline (Steps 3-8 from `~/.claude/skills/curate-learnings/SKILL.md`). This:
-- Analyzes all learnings (themes, hot spots, keyword clusters)
-- Regenerates `.ai-docs/project-dna.md` with curated patterns
-- Updates `.ai-docs/bug-patterns.md` if applicable
-- Does NOT archive (keeps learnings for future reference)
-
-**If count < 5**: Skip curation, note in output.
-
----
-
-### Step 10: Output Summary
+> **Note**: Learning capture and curation are handled automatically by the `learning_capture.py` Stop hook.
 
 ```markdown
 ## Fix Applied
@@ -284,17 +188,6 @@ fi
 | BigPickle | {finding} |
 | GLM 4.7 | {finding} |
 | Grok Code | {finding} |
-
-### Historical Context Used
-{HISTORICAL_CONTEXT_SUMMARY}
-
-### Learning Recorded
-```json
-{LEARNING_ENTRY}
-```
-
-### Curation Status
-{CURATED: project-dna.md updated | SKIPPED: Only {N} learnings, need 5+}
 
 ### Next Steps
 - [ ] Run tests to verify fix
@@ -326,9 +219,9 @@ fi
 - Use 3-minute timeout per agent
 
 **Learning:**
-- ALWAYS append to `.ai-docs/learnings.jsonl` at end
+- Learning capture is automatic via the `learning_capture.py` Stop hook
+- Context injection is automatic via the `user_prompt_submit.py` hook
 - If `.ai-docs/` doesn't exist, suggest `/init-project-dna`
-- Include keywords for future grep searches
 
 **Bash Command Format:**
 - ✅ DO use: `OPENCODE_YOLO=true opencode run --format default -m {MODEL} "{PROMPT}"`
