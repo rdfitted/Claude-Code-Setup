@@ -19,31 +19,7 @@ Extract from the provided comment:
 - **Issue**: What the comment claims is wrong
 - **Suggested Fix**: If provided
 
-### Step 1b: Review Learnings and Code Standards
-
-**Before validating, review relevant context:**
-
-**Extract keywords from the comment:**
-```bash
-powershell -Command "$desc = '{COMMENT_ISSUE}'; $words = $desc -split '\W+' | Where-Object { $_.Length -gt 3 }; ($words | Select-Object -Unique) -join '|'"
-```
-
-**Grep learnings for relevant insights:**
-```bash
-grep -iE "{KEYWORDS}" .ai-docs/learnings.jsonl 2>/dev/null | tail -5
-```
-
-**Read project DNA:**
-```bash
-cat .ai-docs/project-dna.md 2>/dev/null | head -30
-```
-
-**Read code standards (CLAUDE.md):**
-```bash
-cat CLAUDE.md 2>/dev/null | head -50
-```
-
-Store these as context for validation and fixing.
+> **Note**: Historical context, project DNA, and code standards are automatically injected by the `UserPromptSubmit` hook.
 
 ### Step 2: Read the Relevant Code
 
@@ -68,16 +44,14 @@ Understand:
 
 **If VALID (issue is real):**
 1. Explain why it's valid
-2. Review CODE_STANDARDS from CLAUDE.md
-3. Consider any relevant LEARNINGS or PROJECT_DNA patterns
-4. Implement the fix following code standards
-5. Show what changed
+2. Consider any auto-injected context (project DNA, learnings)
+3. Implement the fix following code standards
+4. Show what changed
 
 **If NOT VALID (false positive):**
 1. Explain why it's not valid
 2. Show evidence from the code
-3. Reference LEARNINGS if similar issues have been addressed before
-4. Optionally suggest a reply to the comment
+3. Optionally suggest a reply to the comment
 
 ### Step 5: Output
 
@@ -113,7 +87,7 @@ Understand:
 
 ## Notes
 
-- This is for **single comments** that don't warrant full `/resolve-hive-comments`
+- This is for **single comments** that don't warrant full `/resolveprcomments`
 - No git operations - just read, validate, fix
 - You commit separately after reviewing changes
-- For 3+ comments, use `/resolve-hive-comments` instead
+- For 3+ comments, use `/resolveprcomments` instead

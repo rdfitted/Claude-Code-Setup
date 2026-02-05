@@ -91,7 +91,7 @@ Task(
 
 IMMEDIATELY use the Bash tool to run this EXACT command (10 minute timeout):
 
-codex exec -m gpt-5.2 -s read-only -c model_reasoning_effort=\"low\" --skip-git-repo-check \"Find all code using {PACKAGE_NAME} and check compatibility with {NEW_VERSION}. Search for import statements, API calls, type definitions, configuration files. Report usage patterns and potential breaking changes.\"
+codex exec -m 5.2-codex -s read-only -c model_reasoning_effort=\"low\" --skip-git-repo-check \"Find all code using {PACKAGE_NAME} and check compatibility with {NEW_VERSION}. Search for import statements, API calls, type definitions, configuration files. Report usage patterns and potential breaking changes.\"
 
 Report back:
 - Files using this dependency and HOW they use it
@@ -336,7 +336,7 @@ Each agent uses different model perspective to detect potential conflicts.
 CLOUDSDK_CORE_PROJECT="" GOOGLE_CLOUD_PROJECT="" GCLOUD_PROJECT="" GEMINI_API_KEY=${GEMINI_API_KEY} gemini -m gemini-3-flash-preview -o text "Find breaking changes for {package} {old_version} → {new_version}. Search codebase for usage patterns and potential conflicts."
 
 # Codex - Usage pattern analysis
-codex exec -m gpt-5.2 -s read-only -c model_reasoning_effort="low" --skip-git-repo-check "Find all code using {package} and check compatibility with {new_version}. Report usage patterns and breaking changes."
+codex exec -m 5.2-codex -s read-only -c model_reasoning_effort="low" --skip-git-repo-check "Find all code using {package} and check compatibility with {new_version}. Report usage patterns and breaking changes."
 
 # Claude Haiku (Native Claude Code Subagent) - API verification
 Task(

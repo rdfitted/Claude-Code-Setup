@@ -9,50 +9,9 @@ Use the appropriate thread type based on task complexity and requirements:
 | **Base** | 1 agent, 1 task | Simple tasks, quick queries | Direct execution |
 | **P-Thread** | Parallel agents | Scale throughput, independent subtasks | `/scout`, `/plan` |
 | **C-Thread** | Chained phases | Sequential workflows, build pipelines | `/scout_plan_build_test` |
-| **F-Thread** | Fusion (best-of-N) | Compare approaches, pick winner | `/fusion-*` commands |
-| **B-Thread** | Hierarchical hive | Complex coordination, divide & conquer | `/hive`, `/hive-*` |
-| **S-Thread** | Swarm (multi-hive) | Large-scale parallel domains, mini-queens | `/swarm` |
 | **L-Thread** | Long-running | Extended autonomous work | `/resolve*` commands |
 
-### F-Thread Commands (Competing Implementations)
-- `/fusion-algorithm` - Algorithm implementations
-- `/fusion-refactor` - Refactoring strategies
-- `/fusion-ui` - UI component designs
-- `/fusion-bugfix` - Bug investigation hypotheses
-- `/fusion-api` - API design philosophies
-- `/fusion-perf` - Performance optimizations
-- `/fusion-datamodel` - Data model philosophies
-- `/fusion-test` - Testing strategies
-- `/fusion-arch` - Architecture patterns
-
-### B-Thread Commands (Hive Coordination)
-- `/hive` - Generic multi-agent (1-4 workers)
-- `/hive-refactor` - 9-agent large-scale refactoring
-- `/hive-dependabot` - Dynamic agents per Dependabot PR
-
-### S-Thread Commands (Swarm - Multi-Hive)
-
-Swarm commands use **thin prompts + transparent documentation**:
-- Templates in `~/.claude/swarm-templates/`
-- Session docs in `.swarm/sessions/{ID}/docs/` and `phases/`
-- Agents read phase files just-in-time (reduces context usage)
-
-| Command | Planners | Mode | Use Case |
-|---------|----------|------|----------|
-| `/swarm` | 2-4 | Parallel | Multi-domain tasks |
-| `/resolve-swarm-issue` | 2-4 | Parallel | Multi-domain GitHub issues |
-| `/resolve-swarm-issue-long` | Up to 10 | **Sequential waves** | Complex long-horizon issues |
-
-**Architecture:**
-- Queen (Opus) → Planners (Opus) → Workers (mixed models)
-- `coordination.log` for Queen ↔ Planners communication
-- File ownership matrix prevents mid-flight conflicts
-- Integration review cycle after all Planners complete
-
-**Long-Horizon (`/resolve-swarm-issue-long`):**
-- Deploys 1-2 Planners per wave
-- Later Planners benefit from earlier discoveries
-- Queen adapts domain assignments between waves
+> **Note**: Hive, swarm, and fusion commands have been migrated to `D:\Code Projects\hive-manager`.
 
 ## Paths
 
@@ -63,7 +22,8 @@ Swarm commands use **thin prompts + transparent documentation**:
 | MCP Config | `C:\Users\USERNAME\.mcp.json` |
 | Commands | `C:\Users\USERNAME\.claude\commands\` |
 | Skills | `C:\Users\USERNAME\.claude\skills\` |
-| Swarm Templates | `C:\Users\USERNAME\.claude\swarm-templates\` |
+| Hooks | `C:\Users\USERNAME\.claude\hooks\` |
+| Hook Logs | `C:\Users\USERNAME\.claude\hooks\logs\` |
 | Global Learnings | `C:\Users\USERNAME\.ai-docs\` |
 
 ## Project Locations
@@ -82,9 +42,21 @@ Projects may have an `.ai-docs/` folder at the root for persistent AI-generated 
 | `.ai-docs/file-index.md` | Key files and their purposes |
 | `.ai-docs/decisions.md` | Architectural decisions and rationale |
 
-**Notes**:
-- `/hive` sessions: `.hive/sessions/{SESSION_ID}/`
-- `/swarm` sessions: `.swarm/sessions/{SESSION_ID}/` (includes `docs/`, `phases/`, `state/`, `tasks/`, `logs/`)
+## Hook Infrastructure
+
+Programmatic hooks enforce safety, track state, and inject context automatically.
+
+| Hook | Event | Purpose | Exit Code |
+|------|-------|---------|-----------|
+| `pre_tool_use.py` | PreToolUse | Branch protection, destructive blocking, .env protection, audit log | 0=allow, 2=block |
+| `post_tool_use.py` | PostToolUse | File tracker, tool counter, session warnings | Always 0 |
+| `user_prompt_submit.py` | UserPromptSubmit | Auto-inject learnings, project DNA, universal patterns | Always 0 |
+| `learning_capture.py` | Stop | Capture session learnings to `.ai-docs/learnings.jsonl` | Always 0 |
+| `validate_file_contains.py` | Stop (per-command) | Validate output files contain required sections | 0=pass, 1=retry |
+| `run-checks.py` | PreToolUse (git commit) | Pre-commit lint/type/secret checks | 0=pass |
+| `stop-hook.ps1` | Stop | Ralph loop for `/resolvegitissue` | 0=done, 1=continue |
+
+**Design**: All hooks fail open (exit 0 on error) to avoid blocking Claude. Security hooks (`pre_tool_use.py`) exit 2 to block dangerous operations.
 
 ## Compound Engineering (Learning System)
 
@@ -111,38 +83,30 @@ AI agents learn from past sessions to compound their effectiveness over time.
 
 ### Learning Protocol
 
-**Pre-Session** (commands inject historical context):
-```bash
-# Grep learnings for task-related keywords
-grep -iE "keyword1|keyword2" .ai-docs/learnings.jsonl | tail -10
-```
+**Pre-Session** (automatic via `user_prompt_submit.py` hook):
+- Extracts keywords from the user's prompt
+- Greps `learnings.jsonl` for relevant past insights
+- Reads `project-dna.md` for project patterns
+- Greps `universal-patterns.md` for cross-project patterns
+- Injects all context as `additionalContext` — no manual steps needed
 
-**Post-Session** (agents append learnings):
-```json
-{"date":"YYYY-MM-DD","session":"session-id","task":"description","outcome":"success|partial|failed","keywords":["kw1","kw2"],"insight":"What was learned","files_touched":["file1.ts"]}
-```
+**Post-Session** (automatic via `learning_capture.py` hook):
+- Reads `session_files.jsonl` for files touched during session
+- Generates learning entry with keywords and file list
+- Appends to `.ai-docs/learnings.jsonl`
+- Checks curation threshold and recommends `/curate-learnings` if needed
 
 ### Commands That Learn
 
+All commands benefit from automatic hook-based learning:
+
 | Command | Pre-Session | Post-Session |
 |---------|-------------|--------------|
-| `/fix` | Grep learnings | Append learning |
-| `/fix-hive` | Grep learnings | Queen appends |
-| `/hive` | Pre-scan greps | Queen appends |
-| `/resolve-hive-issue` | Pre-scan greps | Queen appends |
-| `/swarm` | Learning scout | Queen appends (Phase 5) |
-| `/resolve-swarm-issue` | Validation + learning scout | Queen appends (Phase 5) |
-| `/resolve-swarm-issue-long` | Validation + learning scout | Queen appends (Phase 5) |
-| `/resolvegitissue` | Grep learnings | Append learning |
-
-### Keyword Extraction
-
-Use `~/.ai-docs/stopwords.txt` to filter common words:
-```powershell
-# Extract keywords from task description
-# Filter stopwords, keep words > 3 chars
-# Join with | for grep -iE pattern
-```
+| All commands | `user_prompt_submit.py` auto-injects context | `learning_capture.py` auto-captures |
+| `/fix` | Auto-injected | Auto-captured |
+| `/fix-comment` | Auto-injected | Auto-captured |
+| `/resolveprcomments` | Auto-injected | Auto-captured |
+| `/resolvegitissue` | Auto-injected | Auto-captured |
 
 ### Bootstrap New Projects
 

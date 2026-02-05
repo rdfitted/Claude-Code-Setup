@@ -7,7 +7,7 @@ allowed-tools: [Bash, TodoWrite, Task, Write, Glob, Read, Edit]
 
 # Purpose
 
-Re-assess an existing implementation plan using multiple high-reasoning AI agents (GPT-5.2, Gemini 3 Pro, Opus 4.5) to refine it based on new criteria, codebase changes, or updated documentation. The main agent synthesizes the best refinements from all agents into an updated plan.
+Re-assess an existing implementation plan using multiple high-reasoning AI agents (5.2-codex, Gemini 3 Pro, Opus 4.5) to refine it based on new criteria, codebase changes, or updated documentation. The main agent synthesizes the best refinements from all agents into an updated plan.
 
 ## System Prompt Override
 
@@ -20,7 +20,7 @@ Re-assess an existing implementation plan using multiple high-reasoning AI agent
 - `{EXISTING_PLAN}`: Content of the current plan
 - `{PLANS_DIR}`: Directory for storing plans (default: "plans/")
 - `{AIDOCS_DIR}`: Directory with documentation from scout command (default: "aidocs/")
-- `{CODEX_REFINEMENT}`: Refinement suggestions from GPT-5.2
+- `{CODEX_REFINEMENT}`: Refinement suggestions from 5.2-codex
 - `{GEMINI_REFINEMENT}`: Refinement suggestions from Gemini 3 Pro
 - `{SONNET_REFINEMENT}`: Refinement suggestions from Sonnet 4.5
 - `{REFINED_PLAN}`: Final refined plan combining best elements from all agents
@@ -54,7 +54,7 @@ Re-assess an existing implementation plan using multiple high-reasoning AI agent
 
 ### Step 2: Spawn Multiple Refinement Agents in Parallel
 **CRITICAL**: Use Task tool to spawn 3 planning agents in a SINGLE message (parallel execution):
-- Agent 1: GPT-5.2 with high reasoning and thinking mode
+- Agent 1: 5.2-codex with high reasoning and thinking mode
 - Agent 2: Gemini 3 Pro (via Python SDK)
 - Agent 3: Opus 4.5 (native Claude Code subagent with deep reasoning)
 
@@ -73,9 +73,9 @@ Refinement Criteria: {REFINEMENT_CRITERIA if provided, otherwise "General improv
 Relevant Documentation: {AIDOCS_PATHS if found, otherwise "None"}
 ```
 
-**Agent 1 - GPT-5.2 (High Reasoning with Thinking Mode) Prompt:**
+**Agent 1 - 5.2-codex (High Reasoning with Thinking Mode) Prompt:**
 ```
-You are a plan refinement specialist using GPT-5.2. Analyze and refine this existing implementation plan:
+You are a plan refinement specialist using 5.2-codex. Analyze and refine this existing implementation plan:
 
 EXISTING PLAN:
 """
@@ -87,7 +87,7 @@ REFINEMENT CRITERIA: {REFINEMENT_CRITERIA or "General improvement, updated best 
 {If aidocs found: "Reference these documentation files for updated context: {AIDOCS_PATHS}"}
 
 IMMEDIATELY use the Bash tool to run this command with high reasoning and thinking mode:
-codex exec -m gpt-5.2 -c model_reasoning_effort="high" -c thinking="enabled" --skip-git-repo-check "Analyze this implementation plan and provide specific refinements:
+codex exec -m 5.2-codex -c model_reasoning_effort="high" -c thinking="enabled" --skip-git-repo-check "Analyze this implementation plan and provide specific refinements:
 
 EXISTING PLAN:
 {EXISTING_PLAN}
@@ -229,7 +229,7 @@ After plan refinement, display:
 # Plan Refined: {FEATURE_NAME}
 **File**: `{PLAN_FILE_PATH}`
 **Refinement Date**: {DATE}
-**Refinement Agents**: GPT-5.2, Gemini 3 Pro, Opus 4.5
+**Refinement Agents**: 5.2-codex, Gemini 3 Pro, Opus 4.5
 **Refinement Criteria**: {REFINEMENT_CRITERIA or "General improvement"}
 **Documentation Referenced**: {AIDOCS_FILES or "None"}
 
@@ -287,7 +287,7 @@ This plan was refined using insights from 3 advanced AI planning agents:
 
 ---
 📁 **Refined plan**: `{PLAN_FILE_PATH}`
-🤖 **Agents consulted**: 3 (GPT-5.2, Gemini 3 Pro, Opus 4.5)
+🤖 **Agents consulted**: 3 (5.2-codex, Gemini 3 Pro, Opus 4.5)
 🔄 **Refinement type**: {REFINEMENT_CRITERIA}
 📚 **Docs referenced**: {count}
 ```
@@ -344,7 +344,7 @@ The main agent will update the existing plan file with refinement metadata like:
 **Plan Metadata**
 - **Originally Generated**: {ORIGINAL_DATE}
 - **Last Refined**: {REFINEMENT_DATE}
-- **Planning Agents**: GPT-5.2, Gemini 3 Pro, Opus 4.5
+- **Planning Agents**: 5.2-codex, Gemini 3 Pro, Opus 4.5
 - **Documentation Referenced**: {AIDOCS_PATHS}
 
 **Refinement History:**
@@ -391,7 +391,7 @@ The main agent will update the existing plan file with refinement metadata like:
 
 ### Agent Roles in Refinement
 
-**GPT-5.2 (High Reasoning with Thinking Mode)**:
+**5.2-codex (High Reasoning with Thinking Mode)**:
 - Deep technical analysis of implementation details
 - Identify missing edge cases
 - Suggest code-level improvements

@@ -16,7 +16,7 @@ When invoked, you must follow these steps:
    - **ai-sdk-best-practices**: Production best practices for security, performance, error handling, testing, and deployment
 
 3. **Fetch Current Documentation**: Use multiple sources for the latest AI SDK documentation:
-   - **Local Reference**: Read `C:\\Users\\USERNAME\\.claude\\ai_docs\\ai-sdk-llms.txt` for comprehensive guides on RAG, multi-modal agents, Slackbots, natural language to SQL, and Computer Use
+   - **Local Reference**: Read `C:\\Users\\RDuff\\.claude\\ai_docs\\ai-sdk-llms.txt` for comprehensive guides on RAG, multi-modal agents, Slackbots, natural language to SQL, and Computer Use
    - **Context7 MCP Tools**: Use library ID `/vercel/ai` for core AI SDK functionality (2304 code snippets, trust score 10)
    - **AI SDK UI**: Use library ID `/context7/ai-sdk_dev-docs-ai-sdk-ui` for UI components (1216 code snippets, trust score 7.5)
    - **Online Reference**: https://ai-sdk.dev/llms.txt for latest updates
@@ -278,7 +278,7 @@ Provide your comprehensive AI SDK v5 implementation plan with:
 This agent configuration has been optimized based on comprehensive research findings from the official AI SDK v5 documentation.
 
 **Documentation Sources:**
-- **Local Reference**: `C:\\Users\\USERNAME\\.claude\\ai_docs\\ai-sdk-llms.txt` (comprehensive guides and tutorials)
+- **Local Reference**: `C:\\Users\\RDuff\\.claude\\ai_docs\\ai-sdk-llms.txt` (comprehensive guides and tutorials)
 - **Online Reference**: https://ai-sdk.dev/llms.txt (latest updates)
 
 **Key Enhancements Incorporated:**

@@ -207,7 +207,7 @@ Present comprehensive summary to user.
 
 ## Stage 2: Multi-Agent Plan Refinement
 **Refinement Date**: {DATE}
-**Refinement Agents**: GPT-5.2, Gemini 3 Pro, Opus 4.5
+**Refinement Agents**: 5.2-codex, Gemini 3 Pro, Opus 4.5
 **Documentation Referenced**: {AIDOCS_STATUS}
 
 ### Refinement Summary
@@ -292,7 +292,7 @@ Or continue refining:
 
 📁 **Refined Plan**: `{PLAN_FILE_PATH}`
 📚 **Updated Documentation**: `{AIDOCS_PATH or "None (scale < 5)"}`
-🤖 **Refinement Agents**: 3 (GPT-5.2, Gemini 3 Pro, Opus 4.5)
+🤖 **Refinement Agents**: 3 (5.2-codex, Gemini 3 Pro, Opus 4.5)
 🔍 **Scout Agents**: {SCOUT_SCALE}
 🔄 **Refinement Type**: {REFINEMENT_CRITERIA or "General improvement"}
 ```

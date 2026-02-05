@@ -348,7 +348,7 @@ Generate a structured report:
 
 ## Documentation Resources (if scale >= 5)
 - **<documentation_url>** - Brief description
-  Found by: [Gemini Flash Light / GPT-5.2]
+  Found by: [Gemini Flash Light / 5.2-codex]
 - **<documentation_url>** - Brief description
 ...
 

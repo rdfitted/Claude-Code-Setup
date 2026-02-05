@@ -236,18 +236,18 @@ For each VALID comment:
 Collect all changes made.
 ```
 
-### Step 6: Code Simplification (Codex GPT-5.2)
+### Step 6: Code Simplification (Codex 5.2-codex)
 
 **Spawn a Codex agent to simplify the code you just modified.**
 
 ```
 Task(
   subagent_type="general-purpose",
-  prompt="You are a code simplifier using Codex GPT-5.2.
+  prompt="You are a code simplifier using Codex 5.2-codex.
 
 IMMEDIATELY use the Bash tool to run this EXACT command:
 
-codex --dangerously-bypass-approvals-and-sandbox -m gpt-5.2 \"Review and simplify the recently modified files. Apply the code-simplifier principles:
+codex --dangerously-bypass-approvals-and-sandbox -m 5.2-codex \"Review and simplify the recently modified files. Apply the code-simplifier principles:
 
 **Principles:**
 - Preserve functionality: Do not change what the code does
@@ -265,59 +265,16 @@ Report back what was simplified."
 )
 ```
 
-### Step 7: Record Learning (BEFORE COMMIT!)
+### Step 7: Commit and Push
 
-**MANDATORY**: Append learnings from this session to `.ai-docs/learnings.jsonl`.
-
-**Synthesize what you learned:**
-- Which comments were VALID vs MISTAKEN?
-- What patterns emerged from the verification?
-- What files were most frequently touched?
-
-**Append to learnings file:**
-```powershell
-$learning = @{
-    date = (Get-Date -Format "yyyy-MM-dd")
-    session = "resolveprcomments-{PR_NUMBER}"
-    task = "Resolve PR comments"
-    outcome = "success"
-    keywords = @("{keyword1}", "{keyword2}")
-    insight = "{YOUR_SYNTHESIS}"
-    files_touched = @("{file1}", "{file2}")
-} | ConvertTo-Json -Compress
-Add-Content -Path ".ai-docs/learnings.jsonl" -Value $learning
-```
-
-If `.ai-docs/` doesn't exist, note that user should run `/init-project-dna`.
-
-### Step 7b: Auto-Curate Learnings (if threshold met)
-
-**After recording the learning, check if curation should run:**
-
-```powershell
-$learningCount = (Get-Content ".ai-docs/learnings.jsonl" -ErrorAction SilentlyContinue | Measure-Object -Line).Lines
-
-if ($learningCount -ge 5) {
-    Write-Host "CURATING: $learningCount learnings accumulated"
-}
-```
-
-**If count >= 5**: Execute the `curate-learnings` skill workflow inline (from `~/.claude/skills/curate-learnings/SKILL.md`). This:
-- Analyzes all learnings (themes, hot spots, keyword clusters)
-- Regenerates `.ai-docs/project-dna.md` with curated patterns
-- Updates `.ai-docs/bug-patterns.md` if applicable
-- Does NOT archive (keeps learnings for future reference)
-
-**If count < 5**: Skip curation, continue to Step 8.
-
-### Step 8: Commit and Push
+> **Note**: Learning capture and curation are handled automatically by the `learning_capture.py` Stop hook.
 ```
 Clean up any temporary files created during workflow:
 rm -f new_comments.json verification_results.json
 
 Run linting and tests.
 Commit changes with descriptive message including:
-Co-Authored-By: Codex GPT-5.2 <noreply@openai.com>
+Co-Authored-By: Codex 5.2-codex <noreply@openai.com>
 
 Push to remote branch.
 
@@ -338,7 +295,7 @@ Each agent uses different model perspective to verify the same PR comment concer
 - Grok Scout 2 (Standards) - Searches CLAUDE.md for applicable code standards
 
 **Code Simplification Agent:**
-- Codex GPT-5.2 - Simplifies modified code while preserving functionality
+- Codex 5.2-codex - Simplifies modified code while preserving functionality
 
 References the `.codex/skills/code-simplifier/SKILL.md` principles.
 
@@ -371,7 +328,7 @@ OPENCODE_YOLO=true opencode run --format default -m opencode/grok-code "Search c
 ## Verification Summary
 - Comments verified: {count}
 - Agents spawned: {count * 3} verification + {valid_count * 2} context scouts + 1 simplifier
-- Models used: OpenCode BigPickle, GLM 4.7, Grok Code, Codex GPT-5.2
+- Models used: OpenCode BigPickle, GLM 4.7, Grok Code, Codex 5.2-codex
 - VALID (needs implementation): {count}
 - MISTAKEN (already exists): {count}
 - Ties resolved by Claude: {count}
@@ -380,11 +337,7 @@ OPENCODE_YOLO=true opencode run --format default -m opencode/grok-code "Search c
 {list of files changed}
 
 ## Code Simplification
-{list of simplifications applied by Codex GPT-5.2}
-
-## Learnings Captured
-✅ Session learnings appended to .ai-docs/learnings.jsonl
-{CURATED: project-dna.md updated | SKIPPED: Only {N} learnings, need 5+}
+{list of simplifications applied by Codex 5.2-codex}
 
 ## Responses Posted
 {list of MISTAKEN comments with agent evidence}
